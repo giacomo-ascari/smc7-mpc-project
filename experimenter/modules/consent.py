@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+import time
+import vlc
 
 from modules import ed
 from modules import ready
@@ -86,3 +88,23 @@ def gotoConsent(window, frame, ed: ed.ExperimentData):
     consentCheck.pack()
     consentButton.pack()
     consentDutyButton.pack()
+
+    def test():
+        ed.baseline_tempo = 110
+        ed.start_metronome()
+        time.sleep(5)
+        ed.stop_metronome()
+        ed.baseline_tempo = 0
+        media: vlc.MediaPlayer = vlc.MediaPlayer("perturbations/062_gilded_lily.mp3")
+        media.play()
+        time.sleep(5)
+        media.stop()
+        print("test finished")
+        pass
+
+    testButton = tk.Button(
+        master=frame,
+        text="Test",
+        command=test
+    )
+    testButton.pack()    
