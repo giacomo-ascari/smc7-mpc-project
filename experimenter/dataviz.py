@@ -7,8 +7,8 @@ import os
 
 # plot = [title, x, y, color, linestyle]
 # solid, dotted, dashed, dashdot
-def createPlots(plots, title, log=False):
-    plt.figure(figsize=(8, 5))
+def createPlots(plots, title, log=False, figsize=(8, 5)):
+    plt.figure(figsize=figsize)
     for p in plots:
         plt.plot(p[1], p[2], label=p[0], color=p[3], linestyle=p[4])
     if log:
@@ -20,9 +20,10 @@ def createPlots(plots, title, log=False):
 def savePlot(name):
     if not os.path.exists(os.path.join("data", "_plots")):
         os.mkdir(os.path.join("data", "_plots"))
-    plt.savefig(os.path.join("data", "_plots", name), dpi=150) #600
+    plt.savefig(os.path.join("data", "_plots", name), dpi=200) #600
 
-def createErrorbar(x, y, e, range, xlabel, ylabel, cap_color, mark_color, title=None):
+def createErrorbar(x, y, e, range, xlabel, ylabel, cap_color, mark_color, title=None, figsize=(8, 5)):
+    plt.figure(figsize=figsize)
     plt.errorbar(x, y, yerr=e, linestyle='none', marker='d', capsize=4, c=cap_color, markeredgecolor=mark_color, markerfacecolor=mark_color)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)  
@@ -157,7 +158,7 @@ def main():
 
 
     # PLOT THE INDIVIDUAL EXPERIMENTS
-    if False:
+    if True:
         for id in experiment_ids:
             musician = ""
             if experiment[id]['musician']:
@@ -225,7 +226,7 @@ def main():
                         "#000000",
                         "solid"
                     ],
-                ], f"Experiment {id}, iteration #{i+1}, deviation {deviation}%, {musician}")
+                ], f"Experiment {id}, iteration #{i+1}, difference {deviation}%, {musician}")
                 
                 print(f"experiment_{id}_{i+1}")
                 savePlot(f"experiment_{id}_{i+1}.png")
@@ -269,15 +270,16 @@ def main():
     print("standard deviation", ratio_sd)
 
     createErrorbar(
-        ["0", "±4", "±8", "±16"],
-        [ratio_avg["0"], ratio_avg["4"], ratio_avg["8"], ratio_avg["16"]],
-        [ratio_sd["0"], ratio_sd["4"], ratio_sd["8"], ratio_sd["16"]],
+        ["±4%", "±8%", "±16%"],
+        [ratio_avg["4"], ratio_avg["8"], ratio_avg["16"]],
+        [ratio_sd["4"], ratio_sd["8"], ratio_sd["16"]],
         [0.94, 1],
         "Perturbation BPM to SPR difference",
         "Perturbation BPM to tapping ratio",
-        "#FF6600", # cap color
+        "#FF0000", # cap color
         "#0000FF", # mark color
         #title="Perturbation BPM to SPR difference VS.\n Perturbation BPM to tapping ratio"
+        figsize=(8, 4)
     )
 
     savePlot("errorbar.png")
