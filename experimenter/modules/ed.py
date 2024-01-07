@@ -45,12 +45,16 @@ class ExperimentData:
             
             interval = 60 / self.baseline_tempo
             start = self.get_ts()
+            media: vlc.MediaPlayer = vlc.MediaPlayer("cowbell_sample.mp3")
+
             while not self.stop_it:
                 if self.get_ts() > start + interval:
+                    #print(self.get_ts() - start)
                     start = self.get_ts()
-                    playsound("cowbell_sample.mp3")
-                    
+                    media.play()
+                    media: vlc.MediaPlayer = vlc.MediaPlayer("cowbell_sample.mp3")
 
+                    
         self.thread = threading.Thread(target=thread_function)
         self.thread.start()
         print("metronome started")
